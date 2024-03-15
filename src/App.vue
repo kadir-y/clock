@@ -5,7 +5,6 @@
       <v-bottom-navigation>
         <v-btn value="stopwatch">
           <v-icon>mdi-timer</v-icon>
-
           <span>Stopwatch</span>
         </v-btn>
       </v-bottom-navigation>

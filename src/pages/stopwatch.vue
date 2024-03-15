@@ -1,7 +1,7 @@
 <template>
   <div class="stopwatch">
     <div class="overallTime">{{ displayOverallTime }}</div>
-    <div class="lapTime">{{ displayLapTime }}</div>
+    <div class="lapTime">{{ laps.length > 1 ? displayLapTime : '' }}</div>
     <div class="buttons">
       <template v-if="!stopped">
         <v-btn v-if="!running" size="large" @click="startHandler">Start</v-btn>
@@ -14,9 +14,9 @@
     </div>
 
     <v-data-table-virtual
-      v-if="laps.length > 1"
       :headers="table.headers"
       :items="displayLaps"
+      no-data-text="No laps to show"
       height="22rem"
       item-value="index"
     ></v-data-table-virtual>
@@ -62,12 +62,11 @@ export default {
     fitToTime (time) {
       const parser = new dateParser()
       const { hours, minutes, seconds, miliseconds } = parser.mixed(time)
-      return `
-        ${hours === 0 ? '' : hours.toString() + ':'}
-        ${minutes < 10 ? '0' + minutes.toString() : minutes}
-         : ${seconds < 10 ? '0' + seconds.toString() : seconds}
-         .${miliseconds < 100 ? '0' + miliseconds.toString().slice(0, 1) : miliseconds.toString().slice(0, 2)}
-      `
+      return  (hours === 0 ? '' : (hours < 10 ? '0' + hours.toString() : hours.toString()) + ' : ') +
+        (minutes < 10 ? '0' + minutes.toString() : minutes) +
+        (' : ' + (seconds < 10 ? '0' + seconds.toString() : seconds)) +
+        (' .' + (miliseconds < 100 ? '0' + miliseconds.toString().slice(0, 1) : miliseconds.toString().slice(0, 2)))
+      
     },
     runStopwatachInterval () {
       this.stopwatchInterval = setInterval(() => {
@@ -102,7 +101,10 @@ export default {
       // this.finishToLap()
 
       this.laps = []
-      this.overAllTime = 0
+      this.overallTime = 0
+
+      this.displayOverallTime = this.fitToTime(0)
+      this.displayLapTime= this.fitToTime(0)
     },
     resumeHandler () {
       this.stopped = false
@@ -140,8 +142,6 @@ export default {
       lastLap.lapTime += lastLog.endTime - lastLog.startTime
       this.overallTime += lastLog.endTime - lastLog.startTime
     },
-    runStopwatchInterval () {
-    },
     saveLapsToHistory () {
       const stopwatchHistory = JSON.parse(localStorage.getItem("stopwatchHistory"))
       if (stopwatchHistory.length >= 50) stopwatchHistory.shift() 
@@ -163,7 +163,7 @@ export default {
       .reverse()
     }
   },
-  beforeCreate () {
+  mounted () {
     // check history and create if not created 
     // const stopwatchHistory = localStorage.getItem("stopwatchHistory")
     // if (!stopwatchHistory) localStorage.setItem("stopwatchHistory", "[]")
