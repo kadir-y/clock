@@ -1,26 +1,44 @@
 <template>
-  <div class="stopwatch">
-    <div class="overallTime">{{ displayOverallTime }}</div>
-    <div class="lapTime">{{ laps.length > 1 ? displayLapTime : '' }}</div>
-    <div class="buttons">
-      <template v-if="!stopped">
-        <v-btn v-if="!running" size="large" @click="startHandler">Start</v-btn>
-        <v-btn v-if="running" size="large" @click="stopHandler">Stop</v-btn>
-      </template>
-      <v-btn v-else size="large" @click="resumeHandler">Resume</v-btn>
+  <v-container class="text-center">
+    <v-row justify="center">
+        <v-col sm="11" md="6" lg="4" xlg="3">
+          <div class="py-12">
+            <div class="text-h4 pb-2">{{ displayOverallTime }}</div>
+            <div class="text-medium-emphasis text-h5">{{ laps.length > 1 ? displayLapTime : '00 : 00 .00' }}</div>
+          </div>
+          <div class="d-flex justify-space-evenly pb-12">
+            <template v-if="!stopped && !running">
+              <v-btn class="me-2 rounded-pill" size="large" @click="startHandler" color="deep-purple-darken-3">Start</v-btn>
+              <v-btn class="rounded-pill" size="large"  disabled>Lap</v-btn>
+            </template>
 
-      <v-btn v-if="!stopped" size="large" @click="lapHandler" :disabled="!running">Lap</v-btn>
-      <v-btn v-if="stopped" size="large" @click="resetHandler">Reset</v-btn>
-    </div>
+            <template v-if="!stopped && running">
+              <v-btn class="rounded-pill" size="large" color="red-accent-4" @click="stopHandler">Stop</v-btn>
+              <v-btn class="rounded-pill" size="large" @click="lapHandler">Lap</v-btn>
+            </template>
 
-    <v-data-table-virtual
-      :headers="table.headers"
-      :items="displayLaps"
-      no-data-text="No laps to show"
-      height="22rem"
-      item-value="index"
-    ></v-data-table-virtual>
-  </div>
+            <template v-if="stopped">
+              <v-btn class="rounded-pill" size="large" @click="resumeHandler" color="blue-grey-darken-1">Resume</v-btn>
+              <v-btn class="rounded-pill" size="large" @click="resetHandler" variant="outlined" color="red-darken-4">Reset</v-btn>
+            </template>
+          </div>
+          <div>
+            <v-data-table-virtual
+              :headers="table.headers"
+              :items="displayLaps"
+              no-data-text="No laps to show"
+              :style="{
+                height: 'calc(100vh - 20.25rem - 2rem)',
+                minHeight: '15rem',
+                maxHeight: '30rem'
+              }"
+              item-value="index"
+              class="rounded-lg"
+            ></v-data-table-virtual>
+          </div>
+        </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -157,7 +175,7 @@ export default {
         return {
           lapTime: this.fitToTime(lap.lapTime),
           overallTime: this.fitToTime(lap.overallTime),
-          index: lap.index
+          index: lap.index,
         }
       })      
       .reverse()
@@ -172,34 +190,4 @@ export default {
 </script>
 
 <style lang="scss">
-  .stopwatch {
-    max-width: 25rem;
-    margin-top: 3rem;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 1rem;
-  } 
-  .buttons {
-    width: 100%;
-    height: 5rem;
-    display: flex;
-    justify-content: space-evenly;  
-    align-items: center;
-  }
-  .overallTime {
-    text-align: center;
-    width: 100%;
-    font-size: 2rem;
-  }
-  .lapTime {
-    height: 3rem;
-    line-height: 1.25rem;
-    padding-bottom: 1.75rem;
-    font-size: 1.25rem;
-    width: 100%;
-    text-align: center;
-  }
 </style>
