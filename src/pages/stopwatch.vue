@@ -1,7 +1,7 @@
 <template>
   <v-container class="text-center">
     <v-row justify="center">
-        <v-col sm="11" md="6" lg="4" xlg="3">
+        <v-col col="11" style="max-width: 25rem;">
           <div class="py-12">
             <div class="text-h4 pb-2">{{ displayOverallTime }}</div>
             <div class="text-medium-emphasis text-h5">{{ laps.length > 1 ? displayLapTime : '00 : 00 .00' }}</div>
@@ -28,7 +28,7 @@
               :items="displayLaps"
               no-data-text="No laps to show"
               :style="{
-                height: 'calc(100vh - 20.25rem - 2rem)',
+                height: 'calc(100vh - 20.25rem - 8rem)',
                 minHeight: '15rem',
                 maxHeight: '30rem'
               }"
@@ -54,9 +54,9 @@ export default {
       stopped: false,
       table: {
         headers: [
-          { title: "Lap", align: "start", key: "index" },
-          { title: "Lap times", align: "end", key: "lapTime" },
-          { title: "Overall time", align: "end", key: "overallTime" }
+          { title: "Lap", align: "center", key: "index" },
+          { title: "Lap times", align: "center", key: "lapTime" },
+          { title: "Overall time", align: "center", key: "overallTime" }
         ]
       },
       laps: [
