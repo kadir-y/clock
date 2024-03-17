@@ -2,9 +2,9 @@
   <v-container class="text-center">
     <v-row justify="center">
         <v-col col="11" style="max-width: 25rem;">
-          <div class="py-12">
-            <div class="text-h4 pb-2">{{ displayOverallTime }}</div>
-            <div class="text-medium-emphasis text-h5">{{ laps.length > 1 ? displayLapTime : '00 : 00 .00' }}</div>
+          <div class="py-10">
+            <div class="text-h3 pb-2">{{ displayOverallTime }}</div>
+            <div class="text-medium-emphasis text-h4">{{ laps.length > 1 ? displayLapTime : '00 : 00 .00' }}</div>
           </div>
           <div class="d-flex justify-space-evenly pb-12">
             <template v-if="!stopped && !running">
@@ -34,7 +34,17 @@
               }"
               item-value="index"
               class="rounded-lg"
-            ></v-data-table-virtual>
+            >
+              <template v-slot:item.index="{ item }">
+                <span :class="'text-' + item.color + ' font-weight-bold'">{{ item.index }}</span>
+              </template>
+              <template v-slot:item.lapTime="{ item }">
+                <span class="text-medium-emphasis">{{ item.lapTime }}</span>
+              </template>
+              <template v-slot:item.overallTime="{ item }">
+                <span class="text-high-emphasis">{{ item.overallTime }}</span>
+              </template>
+            </v-data-table-virtual>
           </div>
         </v-col>
     </v-row>
@@ -169,14 +179,21 @@ export default {
   },
   computed: {
     displayLaps () {
+      let lastLap;
       return this.laps
       .slice(0, -1)
       .map(lap => {
-        return {
+        const lapObj = {
           lapTime: this.fitToTime(lap.lapTime),
           overallTime: this.fitToTime(lap.overallTime),
           index: lap.index,
         }
+        const difference = lastLap ? lap.lapTime - lastLap.lapTime : 0
+        const toleranceValue = (lap.lapTime + (lastLap ? lastLap.lapTime : 0)) / 10
+        if (Math.abs(difference) > toleranceValue)
+        lapObj.color = difference < 0 ? "deep-purple-darken-3" : "deep-orange-accent-4" 
+        lastLap = lap
+        return lapObj
       })      
       .reverse()
     }
