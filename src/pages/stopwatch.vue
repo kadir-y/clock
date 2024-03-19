@@ -1,7 +1,7 @@
 <template>
   <v-container class="text-center">
     <v-row justify="center">
-        <v-col col="11" style="max-width: 25rem;">
+        <v-col col="11" md="6" lg="4" xlg="3">
           <div class="py-10">
             <div class="text-h3 pb-2">{{ displayOverallTime }}</div>
             <div class="text-medium-emphasis text-h4">{{ laps.length > 1 ? displayLapTime : '00 : 00 .00' }}</div>
@@ -22,30 +22,30 @@
               <v-btn class="rounded-pill" size="large" @click="resetHandler" variant="outlined" color="red-darken-4">Reset</v-btn>
             </template>
           </div>
-          <div>
-            <v-data-table-virtual
-              :headers="table.headers"
-              :items="displayLaps"
-              no-data-text="No laps to show"
-              :style="{
-                height: 'calc(100vh - 20.25rem - 8rem)',
-                minHeight: '15rem',
-                maxHeight: '30rem'
-              }"
-              item-value="index"
-              class="rounded-lg"
-            >
-              <template v-slot:item.index="{ item }">
-                <span :class="'text-' + item.color + ' font-weight-bold'">{{ item.index }}</span>
-              </template>
-              <template v-slot:item.lapTime="{ item }">
-                <span class="text-medium-emphasis">{{ item.lapTime }}</span>
-              </template>
-              <template v-slot:item.overallTime="{ item }">
-                <span class="text-high-emphasis">{{ item.overallTime }}</span>
-              </template>
-            </v-data-table-virtual>
-          </div>
+        </v-col>
+        <v-col col="11" md="6" lg="4" xlg="3">
+          <v-data-table-virtual
+            :headers="table.headers"
+            :items="displayLaps"
+            no-data-text="No laps to show"
+            :style="{
+              height: 'calc(100vh - 20.25rem - 8rem)',
+              minHeight: '15rem',
+              maxHeight: '30rem'
+            }"
+            item-value="index"
+            class="rounded-lg"
+          >
+            <template v-slot:item.index="{ item }">
+              <span :class="'text-' + item.color + ' font-weight-bold'">{{ item.index }}</span>
+            </template>
+            <template v-slot:item.lapTime="{ item }">
+              <span class="text-medium-emphasis">{{ item.lapTime }}</span>
+            </template>
+            <template v-slot:item.overallTime="{ item }">
+              <span class="text-high-emphasis">{{ item.overallTime }}</span>
+            </template>
+          </v-data-table-virtual>
         </v-col>
     </v-row>
   </v-container>
