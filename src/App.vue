@@ -29,7 +29,7 @@
       <router-view />
     </v-main>
     <v-bottom-navigation>
-      <v-btn value="stopwatch">
+      <v-btn>
         <v-icon>mdi-timer</v-icon>
         <span>Stopwatch</span>
       </v-btn>
@@ -39,7 +39,6 @@
 
 <script>
 import { useTheme } from "vuetify"
-
 export default {
   name: "App",
   data () {
@@ -61,7 +60,6 @@ export default {
     }
   },
   mounted () {
-    this.$router.push("/stopwatch")
     const theme = localStorage.getItem("user-theme-preference")
     this.applyTheme(theme)
   },
