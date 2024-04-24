@@ -60,7 +60,8 @@ This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library wi
 
 
 ## 📑 License
-[MIT](http://opensource.org/licenses/MIT)```bash
+[MIT](http://opensource.org/licenses/MIT)
+```bash
 yarn dev
 ```
 
